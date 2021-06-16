@@ -55,6 +55,16 @@ def add_score(
         browser.find_element_by_xpath("//*[@id='submit']").click()
 
 
+def add_player_basic(team, player, dob, position, nationality):
+    for i in range(len(team)):
+        browser.get(f"https://www.thesportsdb.com/edit_player_add.php?t={team[i]}")
+        browser.find_element_by_xpath("//*[@id='fullname']").send_keys(player[i])
+        browser.find_element_by_xpath("//*[@id='datepicker']").send_keys(dob[i])
+        browser.find_element_by_xpath("//*[@id='position']").send_keys(position[i])
+        browser.find_element_by_xpath("//*[@id='countries']").send_keys(nationality[i])
+        browser.find_element_by_xpath("//*[@id='submit']").click()
+
+
 def add_player(
     team, player, dob, position, nationality, height, weight, image_url, number
 ):
