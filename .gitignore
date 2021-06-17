@@ -1,2 +1,4 @@
 
-TheSportsDBSelenium.ipynb
+*.ipynb
+*.pyc
+.ipynb_checkpoints/TheSportsDBFunctions-checkpoint.py
