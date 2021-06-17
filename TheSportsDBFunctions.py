@@ -3,14 +3,9 @@ import urllib.request
 from PIL import Image
 import pandas as pd
 
-option = webdriver.ChromeOptions()
 
-browser = webdriver.Chrome(
-    executable_path="/Users/blakeduncan/Documents/chromedriver", options=option
-)
-
-
-def thesportsdb_login(username, password):
+def thesportsdb_login(driver_path, username, password):
+    browser = webdriver.Chrome(executable_path=driver_path)
     browser.get("https://www.thesportsdb.com/")
     browser.find_element_by_xpath(
         "//*[@id='header']/nav/div/div[2]/ul/li[5]/a[1]"
@@ -55,18 +50,8 @@ def add_score(
         browser.find_element_by_xpath("//*[@id='submit']").click()
 
 
-def add_player_basic(team, player, dob, position, nationality):
-    for i in range(len(team)):
-        browser.get(f"https://www.thesportsdb.com/edit_player_add.php?t={team[i]}")
-        browser.find_element_by_xpath("//*[@id='fullname']").send_keys(player[i])
-        browser.find_element_by_xpath("//*[@id='datepicker']").send_keys(dob[i])
-        browser.find_element_by_xpath("//*[@id='position']").send_keys(position[i])
-        browser.find_element_by_xpath("//*[@id='countries']").send_keys(nationality[i])
-        browser.find_element_by_xpath("//*[@id='submit']").click()
-
-
 def add_player(
-    team, player, dob, position, nationality, height, weight, image_url, number
+    path, team, player, dob, position, nationality, height, weight, number, image_url
 ):
     for i in range(len(team)):
         browser.get(f"https://www.thesportsdb.com/edit_player_add.php?t={team[i]}")
@@ -84,14 +69,14 @@ def add_player(
         browser.find_element_by_xpath("//*[@id='number']").send_keys(number[i])
         browser.find_element_by_xpath("//*[@id='submit']").click()
         try:
-            save_player_thumbnail(player[i], image_url[i])
+            save_player_thumbnail(path, player[i], image_url[i])
             try:
                 browser.find_element_by_xpath(
                     "//*[@id='feature']/div/div/div[1]/a[1]/img"
                 ).click()
                 try:
                     browser.find_element_by_xpath("/html/body/form/input").send_keys(
-                        f"/Users/blakeduncan/Downloads/{player[i]}.jpg"
+                        f"{path}/{player[i]}.jpg"
                     )
                     browser.find_element_by_xpath("/html/body/form/p[3]/input").click()
                 except:
@@ -102,18 +87,14 @@ def add_player(
             continue
 
 
-def retrieve_image_jpg(image_name, image_url):
-    urllib.request.urlretrieve(
-        image_url, f"/Users/blakeduncan/Downloads/{image_name}.jpg"
-    )
-    return Image.open(f"/Users/blakeduncan/Downloads/{image_name}.jpg").convert("RGB")
+def retrieve_image_jpg(path, image_name, image_url):
+    urllib.request.urlretrieve(image_url, f"{path}/{image_name}.jpg")
+    return Image.open(f"{path}/{image_name}.jpg").convert("RGB")
 
 
-def retrieve_image_png(image_name, image_url):
-    urllib.request.urlretrieve(
-        image_url, f"/Users/blakeduncan/Downloads/{image_name}.png"
-    )
-    return Image.open(f"/Users/blakeduncan/Downloads/{image_name}.png").convert("RGBA")
+def retrieve_image_png(path, image_name, image_url):
+    urllib.request.urlretrieve(image_url, f"{path}/{image_name}.png")
+    return Image.open(f"{path}/{image_name}.png").convert("RGBA")
 
 
 def crop_image(pil_img, crop_width, crop_height):
@@ -150,8 +131,8 @@ def expand2square(pil_img, background_color):
         return result
 
 
-def convert_transparent(image_name):
-    img = Image.open(f"/Users/blakeduncan/Downloads/{image_name}.png")
+def convert_transparent(path, image_name):
+    img = Image.open(f"{path}/{image_name}.png")
 
     datas = img.getdata()
 
@@ -164,19 +145,19 @@ def convert_transparent(image_name):
             newData.append(i)
 
     img.putdata(newData)
-    return img.save(f"/Users/blakeduncan/Downloads/{image_name}.png", "PNG")
+    return img.save(f"{path}/{image_name}.png", "PNG")
 
 
-def save_player_thumbnail(player, image_url):
-    img = retrieve_image_jpg(player, image_url)
+def save_player_thumbnail(path, player, image_url):
+    img = retrieve_image_jpg(path, player, image_url)
     im_thumb = crop_max_square(img).resize((700, 700), Image.LANCZOS)
-    return im_thumb.save(f"/Users/blakeduncan/Downloads/{player}.jpg")
+    return im_thumb.save(f"{path}/{player}.jpg")
 
 
-def upload_player_thumbnail(player, image_url):
+def upload_player_thumbnail(path, player, image_url):
     for i in range(len(player)):
         try:
-            save_player_thumbnail(player[i], image_url[i])
+            save_player_thumbnail(path, player[i], image_url[i])
             search = player[i].replace(" ", "+")
             browser.get(f"https://www.thesportsdb.com/search.php?s={search}")
             try:
@@ -188,7 +169,7 @@ def upload_player_thumbnail(player, image_url):
                 ).click()
                 try:
                     browser.find_element_by_xpath("/html/body/form/input").send_keys(
-                        f"/Users/blakeduncan/Downloads/{player[i]}.jpg"
+                        f"{path}/{player[i]}.jpg"
                     )
                     browser.find_element_by_xpath("/html/body/form/p[3]/input").click()
                 except:
@@ -199,14 +180,14 @@ def upload_player_thumbnail(player, image_url):
             continue
 
 
-def save_badge_png(team, image_url):
-    img = retrieve_image_png(team, image_url)
+def save_badge_png(path, team, image_url):
+    img = retrieve_image_png(path, team, image_url)
     im_thumb = expand2square(img, (0, 0, 0, 0)).resize((512, 512), Image.LANCZOS)
-    return im_thumb.save(f"/Users/blakeduncan/Downloads/{team}.png")
+    return im_thumb.save(f"{path}/{team}.png")
 
 
-def save_jersey_png(team, image_url):
-    img = retrieve_image_png(team, image_url)
+def save_jersey_png(path, team, image_url):
+    img = retrieve_image_png(path, team, image_url)
     im_thumb = expand2square(img, (0, 0, 0, 0)).resize((500, 500), Image.LANCZOS)
-    im_thumb.save(f"/Users/blakeduncan/Downloads/{team}.png")
-    return convert_transparent(team)
+    im_thumb.save(f"{path}/{team}.png")
+    return convert_transparent(path, team)
