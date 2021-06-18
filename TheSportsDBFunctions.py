@@ -3,9 +3,10 @@ import urllib.request
 from PIL import Image
 import pandas as pd
 
+browser = webdriver.Chrome(executable_path="/Users/blakeduncan/Documents/chromedriver")
 
-def thesportsdb_login(driver_path, username, password):
-    browser = webdriver.Chrome(executable_path=driver_path)
+
+def thesportsdb_login(username, password):
     browser.get("https://www.thesportsdb.com/")
     browser.find_element_by_xpath(
         "//*[@id='header']/nav/div/div[2]/ul/li[5]/a[1]"
