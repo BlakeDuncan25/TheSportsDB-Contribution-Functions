@@ -228,3 +228,43 @@ def save_logo_png(path, logo, image_url):
     img = retrieve_image_png(path, logo, image_url)
     im_thumb = pad_png(img, (0, 0, 0, 0), 800, 310)
     return im_thumb.save(f"{path}/{logo}.png")
+
+
+def crop_fan_art(pil_img, new_width, new_height):
+    width, height = pil_img.size
+    ratio_pixels = int((new_width / width) * height)
+    pil_img = pil_img.resize((new_width, ratio_pixels), Image.LANCZOS)
+    result = pil_img.crop((0, 0, new_width, new_height))
+    return result
+
+
+def save_fan_art(path, name, image_url):
+    img = retrieve_image_jpg(path, name, image_url)
+    im_thumb = crop_fan_art(img, 1280, 720)
+    return im_thumb.save(f"{path}/{name}.jpg")
+
+
+def upload_team_fan_art(path, team, fanart1, fanart2, fanart3, fanart4):
+    for i in range(len(team)):
+        for n in range(1, 5):
+            try:
+                name = str(team[i]) + f"{n}"
+                if n == 1:
+                    fanart = fanart1[i]
+                elif n == 2:
+                    fanart = fanart2[i]
+                elif n == 3:
+                    fanart = fanart3[i]
+                else:
+                    fanart = fanart4[i]
+                save_fan_art(path, name, fanart)
+                browser.get(
+                    f"https://www.thesportsdb.com/uploadteamfanart{n}.php?t={team[i]}"
+                )
+                browser.find_element_by_xpath("/html/body/form/input").send_keys(
+                    f"{path}/{team[i]}{n}.jpg"
+                )
+                browser.find_element_by_xpath("/html/body/form/p[3]/input").click()
+                n = n + 1
+            except:
+                n = n + 1
