@@ -192,3 +192,27 @@ def save_jersey_png(path, team, image_url):
     im_thumb = expand2square(img, (0, 0, 0, 0)).resize((500, 500), Image.LANCZOS)
     im_thumb.save(f"{path}/{team}.png")
     return convert_transparent(path, team)
+
+
+def pad_png(pil_img, background_color, new_width, new_height):
+    width, height = pil_img.size
+    ratio = width / height
+    new_ratio = new_width / new_height
+    if ratio > new_ratio:
+        ratio_pixels = int(ratio * height)
+        pil_img = pil_img.resize((new_width, ratio_pixels), Image.LANCZOS)
+        result = Image.new(pil_img.mode, (new_width, new_height), background_color)
+        result.paste(pil_img, (0, (new_height - ratio_pixels) // 2))
+        return result
+    else:
+        ratio_pixels = int(ratio * new_height)
+        pil_img = pil_img.resize((ratio_pixels, new_height), Image.LANCZOS)
+        result = Image.new(pil_img.mode, (new_width, new_height), background_color)
+        result.paste(pil_img, ((new_width - ratio_pixels) // 2, 0))
+        return result
+
+
+def save_channel_png(path, channel, image_url):
+    img = retrieve_image_png(path, channel, image_url)
+    im_thumb = pad_png(img, (0, 0, 0, 0), 800, 450)
+    return im_thumb.save(f"{path}/{channel}.png")
