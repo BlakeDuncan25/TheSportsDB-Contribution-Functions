@@ -197,15 +197,21 @@ def save_jersey_png(path, team, image_url):
 def pad_png(pil_img, background_color, new_width, new_height):
     width, height = pil_img.size
     ratio = width / height
+    print(ratio)
     new_ratio = new_width / new_height
+    print(new_ratio)
     if ratio > new_ratio:
-        ratio_pixels = int(ratio * height)
+        print("wide")
+        ratio_pixels = int((new_width / width) * height)
+        print(ratio_pixels)
         pil_img = pil_img.resize((new_width, ratio_pixels), Image.LANCZOS)
         result = Image.new(pil_img.mode, (new_width, new_height), background_color)
         result.paste(pil_img, (0, (new_height - ratio_pixels) // 2))
         return result
     else:
+        print("tall")
         ratio_pixels = int(ratio * new_height)
+        print(ratio_pixels)
         pil_img = pil_img.resize((ratio_pixels, new_height), Image.LANCZOS)
         result = Image.new(pil_img.mode, (new_width, new_height), background_color)
         result.paste(pil_img, ((new_width - ratio_pixels) // 2, 0))
