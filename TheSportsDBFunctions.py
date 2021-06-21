@@ -216,3 +216,9 @@ def save_channel_png(path, channel, image_url):
     img = retrieve_image_png(path, channel, image_url)
     im_thumb = pad_png(img, (0, 0, 0, 0), 800, 450)
     return im_thumb.save(f"{path}/{channel}.png")
+
+
+def save_logo_png(path, logo, image_url):
+    img = retrieve_image_png(path, logo, image_url)
+    im_thumb = pad_png(img, (0, 0, 0, 0), 800, 310)
+    return im_thumb.save(f"{path}/{logo}.png")
