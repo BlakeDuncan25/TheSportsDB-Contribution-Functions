@@ -268,3 +268,80 @@ def upload_team_fan_art(path, team, fanart1, fanart2, fanart3, fanart4):
                 n = n + 1
             except:
                 n = n + 1
+
+
+def create_team(
+    username,
+    password,
+    league,
+    full_team_name,
+    country,
+    api_id,
+    year_established,
+    stadium,
+    stadium_location,
+    wiki_team,
+):
+    browser.get(f"https://thesportsdb.com/edit_team_add.php?l={league[0]}")
+    browser.find_element_by_xpath(
+        "//*[@id='header']/nav/div/div[2]/ul/li[5]/a[1]"
+    ).click()
+    browser.find_element_by_xpath(
+        "//*[@id='feature']/div/div[3]/div/form/div[1]/input"
+    ).send_keys(username)
+    browser.find_element_by_xpath(
+        "//*[@id='feature']/div/div[3]/div/form/div[2]/input"
+    ).send_keys(password)
+    browser.find_element_by_xpath("//*[@id='rememberme']").click()
+    browser.find_element_by_xpath(
+        "//*[@id='feature']/div/div[3]/div/form/div[4]/input"
+    ).click()
+    for i in range(len(league)):
+        browser.get(f"https://thesportsdb.com/edit_team_add.php?l={league[i]}")
+        browser.find_element_by_xpath("//*[@id='fullname']").send_keys(
+            full_team_name[i]
+        )
+        browser.find_element_by_xpath("//*[@id='countries']").send_keys(country[i])
+        browser.find_element_by_xpath("//*[@id='submit']").click()
+        browser.find_element_by_xpath("//*[@id='feature']/div/div/div[3]/a[1]").click()
+        browser.find_element_by_xpath(
+            "//*[@id='feature']/div/div/div[1]/p/a[2]/button"
+        ).click()
+        browser.find_element_by_xpath("//*[@id='formed']").send_keys(
+            year_established[i]
+        )
+        browser.find_element_by_xpath("//*[@id='apifootball']").send_keys(api_id[i])
+        browser.find_element_by_xpath("//*[@id='stadium']").send_keys(stadium[i])
+        browser.find_element_by_xpath("//*[@id='stadiumlocation']").send_keys(
+            stadium_location[i]
+        )
+        browser.find_element_by_xpath("//*[@id='descriptionEN']").send_keys(
+            wiki_team[i]
+        )
+        browser.find_element_by_xpath("//*[@id='submit']").click()
+
+
+def create_team_basic(
+    username, password, league, full_team_name, country,
+):
+    browser.get(f"https://thesportsdb.com/edit_team_add.php?l={league[0]}")
+    browser.find_element_by_xpath(
+        "//*[@id='header']/nav/div/div[2]/ul/li[5]/a[1]"
+    ).click()
+    browser.find_element_by_xpath(
+        "//*[@id='feature']/div/div[3]/div/form/div[1]/input"
+    ).send_keys(username)
+    browser.find_element_by_xpath(
+        "//*[@id='feature']/div/div[3]/div/form/div[2]/input"
+    ).send_keys(password)
+    browser.find_element_by_xpath("//*[@id='rememberme']").click()
+    browser.find_element_by_xpath(
+        "//*[@id='feature']/div/div[3]/div/form/div[4]/input"
+    ).click()
+    for i in range(len(league)):
+        browser.get(f"https://thesportsdb.com/edit_team_add.php?l={league[i]}")
+        browser.find_element_by_xpath("//*[@id='fullname']").send_keys(
+            full_team_name[i]
+        )
+        browser.find_element_by_xpath("//*[@id='countries']").send_keys(country[i])
+        browser.find_element_by_xpath("//*[@id='submit']").click()
