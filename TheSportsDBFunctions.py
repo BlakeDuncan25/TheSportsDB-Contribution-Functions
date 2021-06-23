@@ -348,6 +348,38 @@ def create_team_basic(
         browser.find_element_by_xpath("//*[@id='submit']").click()
 
 
+def get_hockey_roster_player_urls(path, roster_url):
+    browser.get(roster_url)
+    footer = (
+        browser.find_element_by_xpath("//*[@id='roster']/div/div[3]/table/tfoot/tr/td")
+        .text.split("|")[0]
+        .replace("Position: G: ", "")
+        .replace("D: ", "")
+        .replace("F: ", "")
+        .replace(" ", "")
+    )
+    guards = footer.split(",")[0]
+    defenceman = footer.split(",")[1]
+    forwards = footer.split(",")[2]
+    number_of_players = int(guards) + int(defenceman) + int(forwards) + 7
+    hockey_players = {
+        "player_urls": [],
+    }
+    elems = browser.find_elements_by_xpath("//a[@href]")
+    for elem in elems:
+        if elem.get_attribute("href").startswith(
+            "https://www.eliteprospects.com/player/"
+        ):
+            hockey_players["player_urls"].append(elem.get_attribute("href"))
+        else:
+            continue
+
+    hockey_pd = pd.DataFrame.from_dict(hockey_players)
+    hockey_pd = hockey_pd.loc[8:number_of_players]
+    hockey_pd.to_csv(f"{path}/hockey_player_urls.csv")
+    display(HTML(hockey_pd.to_html()))
+
+
 def elite_prospects_scraper(path, team, player_urls):
     hockey_players = {
         "team": [],
