@@ -2,6 +2,7 @@ from selenium import webdriver
 import urllib.request
 from PIL import Image
 import pandas as pd
+from IPython.display import display, HTML
 
 browser = webdriver.Chrome(executable_path="/Users/blakeduncan/Documents/chromedriver")
 
@@ -345,3 +346,50 @@ def create_team_basic(
         )
         browser.find_element_by_xpath("//*[@id='countries']").send_keys(country[i])
         browser.find_element_by_xpath("//*[@id='submit']").click()
+
+
+def elite_prospects_scraper(path, team, player_urls):
+    hockey_players = {
+        "team": [],
+        "player": [],
+        "dob": [],
+        "position": [],
+        "nationality": [],
+        "height": [],
+        "weight": [],
+        "number": [],
+    }
+
+    for i in range(len(player_urls)):
+        browser.get(player_urls[i])
+        player = browser.find_element_by_xpath(
+            "//*[@id='component-container']/div[1]/div/div/div[2]/div[1]/div[1]/div[1]"
+        ).text
+        dob = browser.find_element_by_xpath(
+            "//*[@id='component-container']/div[3]/div[3]/div[2]/div[3]/div[2]/div/div[1]/div[2]/a"
+        ).text
+        position = browser.find_element_by_xpath(
+            "//*[@id='component-container']/div[3]/div[3]/div[2]/div[3]/div[2]/div/div[2]/div[2]"
+        ).text
+        nationality = browser.find_element_by_xpath(
+            "//*[@id='component-container']/div[3]/div[3]/div[2]/div[3]/div[2]/div/div[7]/div[2]/a"
+        ).text
+        height = browser.find_element_by_xpath(
+            "//*[@id='component-container']/div[3]/div[3]/div[2]/div[3]/div[2]/div/div[4]/div[2]"
+        ).text
+        weight = browser.find_element_by_xpath(
+            "//*[@id='component-container']/div[3]/div[3]/div[2]/div[3]/div[2]/div/div[6]/div[2]"
+        ).text
+        number = "..."
+        hockey_players["team"].append(team[i])
+        hockey_players["player"].append(player)
+        hockey_players["dob"].append(dob)
+        hockey_players["position"].append(position)
+        hockey_players["nationality"].append(nationality)
+        hockey_players["height"].append(height)
+        hockey_players["weight"].append(weight)
+        hockey_players["number"].append(number)
+
+    hockey_pd = pd.DataFrame.from_dict(hockey_players)
+    hockey_pd.to_csv(f"{path}/hockey_players.csv")
+    display(HTML(hockey_pd.to_html()))
