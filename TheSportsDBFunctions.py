@@ -358,6 +358,7 @@ def elite_prospects_scraper(path, team, player_urls):
         "height": [],
         "weight": [],
         "number": [],
+        "image_url": [],
     }
 
     for i in range(len(player_urls)):
@@ -381,6 +382,15 @@ def elite_prospects_scraper(path, team, player_urls):
             "//*[@id='component-container']/div[3]/div[3]/div[2]/div[3]/div[2]/div/div[6]/div[2]"
         ).text
         number = "..."
+        image_url = (
+            browser.find_element_by_xpath(
+                "//*[@id='component-container']/div[1]/div/div/div[1]/div"
+            )
+            .get_attribute("style")
+            .replace("background-image: url(", "https:")
+            .replace('"', "")
+            .replace(");", "")
+        )
         hockey_players["team"].append(team[i])
         hockey_players["player"].append(player)
         hockey_players["dob"].append(dob)
@@ -389,6 +399,7 @@ def elite_prospects_scraper(path, team, player_urls):
         hockey_players["height"].append(height)
         hockey_players["weight"].append(weight)
         hockey_players["number"].append(number)
+        hockey_players["image_url"].append(image_url)
 
     hockey_pd = pd.DataFrame.from_dict(hockey_players)
     hockey_pd.to_csv(f"{path}/hockey_players.csv")
