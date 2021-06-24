@@ -1,4 +1,5 @@
 from selenium import webdriver
+from selenium.webdriver.common.keys import Keys
 import urllib.request
 from PIL import Image
 import pandas as pd
@@ -66,8 +67,12 @@ def add_player(
         browser.find_element_by_xpath(
             "//*[@id='feature']/div/div/div[1]/a[4]/button"
         ).click()
-        browser.find_element_by_xpath("//*[@id='height']").send_keys(height[i])
-        browser.find_element_by_xpath("//*[@id='weight']").send_keys(weight[i])
+        browser.find_element_by_xpath("//*[@id='height']").send_keys(
+            Keys.chord(Keys.CONTROL, "a"), height[i]
+        )
+        browser.find_element_by_xpath("//*[@id='weight']").send_keys(
+            Keys.chord(Keys.CONTROL, "a"), weight[i]
+        )
         browser.find_element_by_xpath("//*[@id='number']").send_keys(number[i])
         browser.find_element_by_xpath("//*[@id='submit']").click()
         try:
