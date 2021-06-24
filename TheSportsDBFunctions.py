@@ -392,7 +392,7 @@ def get_hockey_roster_player_urls(path, team, roster_url):
                 continue
         hockey_pd = pd.DataFrame.from_dict(hockey_players)
         hockey_pd = hockey_pd.loc[8:number_of_players]
-        hockey_pd.to_csv(f"{path}/hockey_player_urls_{team[input]}.csv")
+        hockey_pd.to_csv(f"{path}/hockey_player_urls_{team[i]}.csv")
         display(HTML(hockey_pd.to_html()))
 
 
