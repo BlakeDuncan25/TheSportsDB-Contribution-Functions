@@ -54,7 +54,17 @@ def add_score(
 
 
 def add_player(
-    path, team, player, dob, position, nationality, height, weight, number, image_url
+    path,
+    team,
+    player,
+    dob,
+    position,
+    nationality,
+    height,
+    weight,
+    number,
+    team_name,
+    image_url,
 ):
     for i in range(len(team)):
         browser.get(f"https://www.thesportsdb.com/edit_player_add.php?t={team[i]}")
@@ -72,6 +82,7 @@ def add_player(
         browser.find_element_by_xpath("//*[@id='weight']").send_keys(Keys.COMMAND, "a")
         browser.find_element_by_xpath("//*[@id='weight']").send_keys(weight[i])
         browser.find_element_by_xpath("//*[@id='number']").send_keys(number[i])
+        browser.find_element_by_xpath("//*[@id='team']").send_keys(team_name[i])
         browser.find_element_by_xpath("//*[@id='submit']").click()
         try:
             save_player_thumbnail(path, player[i], image_url[i])
