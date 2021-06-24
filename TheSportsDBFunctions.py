@@ -62,7 +62,6 @@ def add_player(
     nationality,
     height,
     weight,
-    number,
     team_name,
     image_url,
 ):
@@ -81,7 +80,6 @@ def add_player(
         browser.find_element_by_xpath("//*[@id='height']").send_keys(height[i])
         browser.find_element_by_xpath("//*[@id='weight']").send_keys(Keys.COMMAND, "a")
         browser.find_element_by_xpath("//*[@id='weight']").send_keys(weight[i])
-        browser.find_element_by_xpath("//*[@id='number']").send_keys(number[i])
         browser.find_element_by_xpath("//*[@id='team']").send_keys(team_name[i])
         browser.find_element_by_xpath("//*[@id='submit']").click()
         try:
@@ -403,7 +401,6 @@ def elite_prospects_scraper(path, team, player_urls):
         "nationality": [],
         "height": [],
         "weight": [],
-        "number": [],
         "image_url": [],
     }
 
@@ -427,7 +424,6 @@ def elite_prospects_scraper(path, team, player_urls):
         weight = browser.find_element_by_xpath(
             "//*[@id='component-container']/div[3]/div[3]/div[2]/div[3]/div[2]/div/div[6]/div[2]"
         ).text
-        number = "..."
         image_url = (
             browser.find_element_by_xpath(
                 "//*[@id='component-container']/div[1]/div/div/div[1]/div"
@@ -444,7 +440,6 @@ def elite_prospects_scraper(path, team, player_urls):
         hockey_players["nationality"].append(nationality)
         hockey_players["height"].append(height)
         hockey_players["weight"].append(weight)
-        hockey_players["number"].append(number)
         hockey_players["image_url"].append(image_url)
 
     hockey_pd = pd.DataFrame.from_dict(hockey_players)
