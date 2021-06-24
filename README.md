@@ -62,9 +62,10 @@ nationality = player_csv.nationality.tolist()
 height = player_csv.height.tolist()
 weight = player_csv.weight.tolist()
 number = player_csv.number.tolist()
+team_name = player_csv.team_name.tolist()
 image_url = player_csv.image_url.tolist()
 
-spdb.add_player(path, team, player, dob, position, nationality, height, weight, number, image_url)
+spdb.add_player(path, team, player, dob, position, nationality, height, weight, number, team_name, image_url)
 ```
 
 Add Teams
