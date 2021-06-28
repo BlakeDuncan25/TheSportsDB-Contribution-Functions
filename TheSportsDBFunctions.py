@@ -368,14 +368,24 @@ def get_hockey_roster_player_urls(path, team, roster_url):
                 "//*[@id='roster']/div/div[3]/table/tfoot/tr/td"
             )
             .text.split("|")[0]
-            .replace("Position: G: ", "")
+            .replace("Position: ", "")
+            .replace("G: ", "")
             .replace("D: ", "")
             .replace("F: ", "")
             .replace(" ", "")
         )
-        guards = footer.split(",")[0]
-        defenceman = footer.split(",")[1]
-        forwards = footer.split(",")[2]
+        try:
+            guards = footer.split(",")[0]
+        except:
+            guards = 0
+        try:
+            defenceman = footer.split(",")[1]
+        except:
+            defenceman = 0
+        try:
+            forwards = footer.split(",")[2]
+        except:
+            forwards = 0
         number_of_players = int(guards) + int(defenceman) + int(forwards) + 7
         elems = browser.find_elements_by_xpath("//a[@href]")
         hockey_players = {
