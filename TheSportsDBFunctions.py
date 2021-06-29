@@ -4,6 +4,7 @@ import urllib.request
 from PIL import Image
 import pandas as pd
 from IPython.display import display, HTML
+import time
 
 browser = webdriver.Chrome(executable_path="/Users/blakeduncan/Documents/chromedriver")
 
@@ -404,6 +405,7 @@ def get_hockey_roster_player_urls(path, team, roster_url):
         hockey_pd = hockey_pd.loc[8:number_of_players]
         hockey_pd.to_csv(f"{path}/hockey_player_urls_{team[i]}.csv")
         display(HTML(hockey_pd.to_html()))
+        time.sleep(5)
 
 
 def elite_prospects_scraper(path, team, player_urls):
