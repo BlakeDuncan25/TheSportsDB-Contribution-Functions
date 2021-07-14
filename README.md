@@ -79,8 +79,10 @@ year_established = team_csv.year_established.tolist()
 stadium = team_csv.stadium.tolist()
 stadium_location = team_csv.stadium_location.tolist()
 wiki_team = team_csv.wiki_team.tolist()
+badge_url = team_csv.badge_url.tolist()
 
 spdb.create_team(
+    path,
     username,
     password,
     league,
@@ -91,6 +93,7 @@ spdb.create_team(
     stadium,
     stadium_location,
     wiki_team,
+    badge_url,
 )
 ```
 
