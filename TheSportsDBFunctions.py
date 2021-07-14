@@ -285,6 +285,7 @@ def upload_team_fan_art(path, team, fanart1, fanart2, fanart3, fanart4):
 
 
 def create_team(
+    path,
     username,
     password,
     league,
@@ -295,6 +296,7 @@ def create_team(
     stadium,
     stadium_location,
     wiki_team,
+    badge_url,
 ):
     browser.get(f"https://thesportsdb.com/edit_team_add.php?l={league[0]}")
     browser.find_element_by_xpath(
@@ -333,6 +335,20 @@ def create_team(
             wiki_team[i]
         )
         browser.find_element_by_xpath("//*[@id='submit']").click()
+        try:
+            save_badge_png(path, api_id[i], badge_url[i])
+            browser.find_element_by_xpath(
+                "//*[@id='feature']/div/div/div[1]/a[1]/img"
+            ).click()
+            try:
+                browser.find_element_by_xpath("/html/body/form/input").send_keys(
+                    f"{path}/{api_id[i]}.png"
+                )
+                browser.find_element_by_xpath("/html/body/form/p[3]/input").click()
+            except:
+                continue
+        except:
+            continue
 
 
 def create_team_basic(
