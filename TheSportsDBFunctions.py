@@ -295,7 +295,9 @@ def create_team(
     year_established,
     stadium,
     stadium_location,
+    stadium_capacity,
     wiki_team,
+    wiki_stadium,
     badge_url,
 ):
     browser.get(f"https://thesportsdb.com/edit_team_add.php?l={league[0]}")
@@ -331,8 +333,14 @@ def create_team(
         browser.find_element_by_xpath("//*[@id='stadiumlocation']").send_keys(
             stadium_location[i]
         )
+        browser.find_element_by_xpath("//*[@id='stadiumcapacity']").send_keys(
+            stadium_capacity[i]
+        )
         browser.find_element_by_xpath("//*[@id='descriptionEN']").send_keys(
             wiki_team[i]
+        )
+        browser.find_element_by_xpath("//*[@id='descriptionStadium']").send_keys(
+            wiki_stadium[i]
         )
         browser.find_element_by_xpath("//*[@id='submit']").click()
         try:
