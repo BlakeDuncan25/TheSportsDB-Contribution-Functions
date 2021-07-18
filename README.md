@@ -101,6 +101,19 @@ spdb.create_team(
 )
 ```
 
+Move Teams
+```
+team_csv = pd.read_csv("/Users/blakeduncan/Downloads/teams.csv")
+
+tsdb_id = team_csv.tsdb_id.tolist()
+league_name = team_csv.league_name.tolist()
+
+spdb.move_team(
+    tsdb_id,
+    league_name,
+)
+```
+
 Format Image to Badge Dimensions
 ```
 team = "Team Name"
