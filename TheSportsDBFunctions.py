@@ -492,8 +492,12 @@ def move_team(tsdb_id, league_name, cup=False):
         for i in range(len(tsdb_id)):
             browser.get(f"https://www.thesportsdb.com/edit_team.php?t={tsdb_id[i]}")
             for x in range(2, 8):
-                if browser.find_element_by_xpath(f"//*[@id=' \'league{x}\'']").text == "..." or browser.find_element_by_xpath(f"//*[@id=' \'league{x}\'']").text == league_name:
-                    browser.find_element_by_xpath(f"//*[@id=' \'league{x}\'']").send_keys(
+                if (
+                    browser.find_element_by_xpath(f"//*[@id='league{x}']").text == "..."
+                    or browser.find_element_by_xpath(f"//*[@id='league{x}']").text
+                    == league_name
+                ):
+                    browser.find_element_by_xpath(f"//*[@id='league{x}']").send_keys(
                         league_name[i]
                     )
                     break
