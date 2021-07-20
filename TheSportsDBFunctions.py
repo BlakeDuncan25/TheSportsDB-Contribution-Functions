@@ -496,7 +496,7 @@ def move_team(tsdb_id, league_name, cup=False):
                 select = Select(browser.find_element_by_xpath(f"//*[@id='league{x}']"))
                 selected_option = select.first_selected_option
                 league = selected_option.text
-                if league == "..." or league == league_name:
+                if league == "..." or league == league_name[i]:
                     browser.find_element_by_xpath(f"//*[@id='league{x}']").send_keys(
                         league_name[i]
                     )
