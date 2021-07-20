@@ -487,10 +487,21 @@ def elite_prospects_scraper(path, team, player_urls):
     display(HTML(hockey_pd.to_html()))
 
 
-def move_team(
-    tsdb_id, league_name,
-):
-    for i in range(len(tsdb_id)):
-        browser.get(f"https://www.thesportsdb.com/edit_team.php?t={tsdb_id[i]}")
-        browser.find_element_by_xpath("//*[@id='league']").send_keys(league_name[i])
-        browser.find_element_by_xpath("//*[@id='submit']").click()
+def move_team(tsdb_id, league_name, cup=False):
+    if cup:
+        for i in range(len(tsdb_id)):
+            browser.get(f"https://www.thesportsdb.com/edit_team.php?t={tsdb_id[i]}")
+            for x in range(2, 8):
+                if browser.find_element_by_xpath(f"//*[@id=' \'league{x}\'']").text == "..." or browser.find_element_by_xpath(f"//*[@id=' \'league{x}\'']").text == league_name:
+                    browser.find_element_by_xpath(f"//*[@id=' \'league{x}\'']").send_keys(
+                        league_name[i]
+                    )
+                    break
+                else:
+                    continue
+            browser.find_element_by_xpath("//*[@id='submit']").click()
+    else:
+        for i in range(len(tsdb_id)):
+            browser.get(f"https://www.thesportsdb.com/edit_team.php?t={tsdb_id[i]}")
+            browser.find_element_by_xpath("//*[@id='league']").send_keys(league_name[i])
+            browser.find_element_by_xpath("//*[@id='submit']").click()
