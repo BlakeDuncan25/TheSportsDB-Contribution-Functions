@@ -1,5 +1,6 @@
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.support.select import Select
 import urllib.request
 from PIL import Image
 import pandas as pd
@@ -492,11 +493,9 @@ def move_team(tsdb_id, league_name, cup=False):
         for i in range(len(tsdb_id)):
             browser.get(f"https://www.thesportsdb.com/edit_team.php?t={tsdb_id[i]}")
             for x in range(2, 8):
-                league = (
-                    browser.find_element_by_xpath(f"//*[@id='league{x}']")
-                    .getFirstSelectedOption()
-                    .text
-                )
+                select = Select(browser.find_element_by_xpath(f"//*[@id='league{x}']"))
+                selected_option = select.first_selected_option
+                league = selected_option.texxt
                 print(league)
                 if league == "..." or league == league_name:
                     # browser.find_element_by_xpath(f"//*[@id='league{x}']").send_keys(
