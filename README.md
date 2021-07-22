@@ -111,6 +111,7 @@ league_name = team_csv.league_name.tolist()
 spdb.move_team(
     tsdb_id,
     league_name,
+    cup=False
 )
 ```
 
