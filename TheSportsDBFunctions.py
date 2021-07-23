@@ -7,7 +7,13 @@ import pandas as pd
 from IPython.display import display, HTML
 import time
 
-browser = webdriver.Chrome(executable_path="/Users/blakeduncan/Documents/chromedriver")
+chrome_options = webdriver.ChromeOptions()
+prefs = {"profile.managed_default_content_settings.images": 2}
+chrome_options.add_experimental_option("prefs", prefs)
+browser = webdriver.Chrome(
+    executable_path="/Users/blakeduncan/Documents/chromedriver",
+    chrome_options=chrome_options,
+)
 
 
 def thesportsdb_login(username, password):
@@ -355,32 +361,6 @@ def create_team(
                 continue
         except:
             continue
-
-
-def create_team_basic(
-    username, password, league, full_team_name, country,
-):
-    browser.get(f"https://thesportsdb.com/edit_team_add.php?l={league[0]}")
-    browser.find_element_by_xpath(
-        "//*[@id='header']/nav/div/div[2]/ul/li[5]/a[1]"
-    ).click()
-    browser.find_element_by_xpath(
-        "//*[@id='feature']/div/div[3]/div/form/div[1]/input"
-    ).send_keys(username)
-    browser.find_element_by_xpath(
-        "//*[@id='feature']/div/div[3]/div/form/div[2]/input"
-    ).send_keys(password)
-    browser.find_element_by_xpath("//*[@id='rememberme']").click()
-    browser.find_element_by_xpath(
-        "//*[@id='feature']/div/div[3]/div/form/div[4]/input"
-    ).click()
-    for i in range(len(league)):
-        browser.get(f"https://thesportsdb.com/edit_team_add.php?l={league[i]}")
-        browser.find_element_by_xpath("//*[@id='fullname']").send_keys(
-            full_team_name[i]
-        )
-        browser.find_element_by_xpath("//*[@id='countries']").send_keys(country[i])
-        browser.find_element_by_xpath("//*[@id='submit']").click()
 
 
 def get_hockey_roster_player_urls(path, team, roster_url):
