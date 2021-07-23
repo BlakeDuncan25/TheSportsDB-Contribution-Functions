@@ -11,10 +11,7 @@ browser = webdriver.Chrome(executable_path="/Users/blakeduncan/Documents/chromed
 
 
 def thesportsdb_login(username, password):
-    browser.get("https://www.thesportsdb.com/")
-    browser.find_element_by_xpath(
-        "//*[@id='header']/nav/div/div[2]/ul/li[5]/a[1]"
-    ).click()
+    browser.get("https://www.thesportsdb.com/user_login.php")
     browser.find_element_by_xpath(
         "//*[@id='feature']/div/div[3]/div/form/div[1]/input"
     ).send_keys(username)
