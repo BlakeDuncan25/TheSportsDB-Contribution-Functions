@@ -1,11 +1,11 @@
+import urllib.request
+import time
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.select import Select
-import urllib.request
 from PIL import Image
 import pandas as pd
 from IPython.display import display, HTML
-import time
 
 chrome_options = webdriver.ChromeOptions()
 prefs = {"profile.managed_default_content_settings.images": 2}
