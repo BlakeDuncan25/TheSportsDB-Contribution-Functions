@@ -494,7 +494,7 @@ def add_channel_bulk(api_key, league_id, season, channel):
     league_events = requests.get(url)
     parse_league_events = league_events.json()
     df_league_events = pd.DataFrame(parse_league_events['events'])
-    idEvent = event_csv.idEvent.tolist()
+    idEvent = df_league_events.idEvent.tolist()
     for i in range(len(idEvent)):
         browser.get(f"https://www.thesportsdb.com/edit_event_tv.php?e={idEvent[i]}")
         browser.find_element_by_id("channel").send_keys(channel)
