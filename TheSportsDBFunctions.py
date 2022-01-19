@@ -6,6 +6,8 @@ from selenium.webdriver.support.select import Select
 from PIL import Image
 import pandas as pd
 from IPython.display import display, HTML
+import requests
+import json
 
 chrome_options = webdriver.ChromeOptions()
 prefs = {"profile.managed_default_content_settings.images": 2}
@@ -486,3 +488,14 @@ def move_team(tsdb_id, league_name, cup=False):
             browser.get(f"https://www.thesportsdb.com/edit_team.php?t={tsdb_id[i]}")
             browser.find_element_by_xpath("//*[@id='league']").send_keys(league_name[i])
             browser.find_element_by_xpath("//*[@id='submit']").click()
+
+def add_channel_bulk(api_key, league_id, season, channel):
+    url = f"https://www.thesportsdb.com/api/v1/json/{api_key}/eventsseason.php?id={league_id}&s={season}"
+    league_events = requests.get(url)
+    parse_league_events = league_events.json()
+    df_league_events = pd.DataFrame(parse_league_events['events'])
+    idEvent = event_csv.idEvent.tolist()
+    for i in range(len(idEvent)):
+        browser.get(f"https://www.thesportsdb.com/edit_event_tv.php?e={idEvent[i]}")
+        browser.find_element_by_id("channel").send_keys(channel)
+        browser.find_element_by_name("submit").click()
