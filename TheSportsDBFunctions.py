@@ -505,3 +505,12 @@ def add_channel_ncaam(idEvent, channel):
         browser.get(f"https://www.thesportsdb.com/edit_event_tv.php?e={idEvent[i]}")
         browser.find_element_by_id("channel").send_keys(channel[i])
         browser.find_element_by_name("submit").click()
+
+def delete_all_events(api_key, league_id, season):
+    url = f"https://www.thesportsdb.com/api/v1/json/{api_key}/eventsseason.php?id={league_id}&s={season}"
+    league_events = requests.get(url)
+    parse_league_events = league_events.json()
+    df_league_events = pd.DataFrame(parse_league_events['events'])
+    idEvent = df_league_events.idEvent.tolist()
+    for i in range(len(idEvent)):
+        browser.get(f"https://www.thesportsdb.com/event.php?e={idEvent[i]}&d=9")
