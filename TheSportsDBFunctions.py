@@ -499,3 +499,9 @@ def add_channel_bulk(api_key, league_id, season, channel):
         browser.get(f"https://www.thesportsdb.com/edit_event_tv.php?e={idEvent[i]}")
         browser.find_element_by_id("channel").send_keys(channel)
         browser.find_element_by_name("submit").click()
+
+def add_channel_ncaam(idEvent, channel):
+    for i in range(len(idEvent)):
+        browser.get(f"https://www.thesportsdb.com/edit_event_tv.php?e={idEvent[i]}")
+        browser.find_element_by_id("channel").send_keys(channel[i])
+        browser.find_element_by_name("submit").click()
