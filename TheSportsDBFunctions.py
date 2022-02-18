@@ -550,7 +550,7 @@ def check_teams_in_leagues(tsdb_sports_league, api_sports_key, tsdb_key):
     response_pd = pd.DataFrame(response)
     response_pd["id"] = response_pd["id"].astype("str")
     response_pd = response_pd[["id", "name"]]
-    df = response_pd.merge(lookup_all_teams_df, on="id", how="left")
+    df = response_pd.merge(lookup_all_teams_df, on="id", how="outer")
     df = df.sort_values(["strTeam"])
 
     return df
