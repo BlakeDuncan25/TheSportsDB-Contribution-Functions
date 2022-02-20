@@ -8,6 +8,7 @@ import pandas as pd
 from IPython.display import display, HTML
 import requests
 import json
+from ast import literal_eval
 
 chrome_options = webdriver.ChromeOptions()
 prefs = {"profile.managed_default_content_settings.images": 2}
@@ -516,7 +517,7 @@ def delete_all_events(api_key, league_id, season):
     for i in range(len(idEvent)):
         browser.get(f"https://www.thesportsdb.com/event.php?e={idEvent[i]}&d=9")
 
-def check_teams_in_leagues(tsdb_sports_league, api_sports_key, tsdb_key):
+def check_teams_in_leagues(tsdb_sports_league, api_sports_key, tsdb_key, v3_soccer_id):
 
     lookup_all_teams = requests.get(
         f"https://www.thesportsdb.com/api/v1/json/{tsdb_key}/lookup_all_teams.php?id={tsdb_sports_league}"
@@ -533,21 +534,33 @@ def check_teams_in_leagues(tsdb_sports_league, api_sports_key, tsdb_key):
     api_sports_league = lookupleague["leagues"][0].get("idAPIfootball")
     sport = lookupleague["leagues"][0].get("strSport")
     season = lookupleague["leagues"][0].get("strCurrentSeason")
+    version = "v1"
     if sport == "Ice Hockey":
         sport = "hockey"
         season = season[0:4]
+    elif sport == "Soccer":
+        sport = "football"
+        season = season[0:4]
+        version = "v3"
+        api_sports_league = v3_soccer_id
     elif sport in ["Volleyball", "Rugby", "Handball"]:
         season = season[0:4]
-    url = f"https://v1.{sport}.api-sports.io/teams?league={api_sports_league}&season={season}"
+    url = f"https://{version}.{sport}.api-sports.io/teams?league={api_sports_league}&season={season}"
     payload = {}
     headers = {
         "x-rapidapi-key": api_sports_key,
-        "x-rapidapi-host": f"v1.{sport}.api-sports.io",
+        "x-rapidapi-host": f"{version}.{sport}.api-sports.io",
     }
     response = requests.request("GET", url, headers=headers, data=payload).json()[
         "response"
     ]
-    response_pd = pd.DataFrame(response)
+    if sport == "football":
+        df = pd.DataFrame(response)
+        df.team = df.team.fillna({i: {} for i in df.index})
+        response_pd = df.join(pd.json_normalize(df.team))
+        response_pd.drop(columns=['team', 'venue'], inplace=True)
+    else:
+        response_pd = pd.DataFrame(response)
     response_pd["id"] = response_pd["id"].astype("str")
     response_pd = response_pd[["id", "name"]]
     df = response_pd.merge(lookup_all_teams_df, on="id", how="outer")
