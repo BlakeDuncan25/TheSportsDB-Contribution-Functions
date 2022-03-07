@@ -517,6 +517,16 @@ def delete_all_events(api_key, league_id, season):
     for i in range(len(idEvent)):
         browser.get(f"https://www.thesportsdb.com/event.php?e={idEvent[i]}&d=9")
 
+def list_teams(api_key, league_id):
+    lookup_all_teams = requests.get(
+        f"https://www.thesportsdb.com/api/v1/json/{api_key}/lookup_all_teams.php?id={league_id}"
+    ).json()
+    lookup_all_teams_df = pd.DataFrame(lookup_all_teams["teams"])
+    lookup_all_teams_df = lookup_all_teams_df[["strTeam"]]
+    
+    return lookup_all_teams_df
+
+
 def check_teams_in_leagues(tsdb_sports_league, api_sports_key, tsdb_key, v3_soccer_id):
 
     lookup_all_teams = requests.get(
