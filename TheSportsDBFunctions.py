@@ -522,7 +522,7 @@ def list_teams(api_key, league_id):
         f"https://www.thesportsdb.com/api/v1/json/{api_key}/lookup_all_teams.php?id={league_id}"
     ).json()
     lookup_all_teams_df = pd.DataFrame(lookup_all_teams["teams"])
-    lookup_all_teams_df = lookup_all_teams_df[["strTeam"]]
+    lookup_all_teams_df = lookup_all_teams_df[["strTeam", "strCountry", "strSport"]]
     
     return lookup_all_teams_df
 
