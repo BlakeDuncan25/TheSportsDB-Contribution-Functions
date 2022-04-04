@@ -309,7 +309,7 @@ def create_team(
 ):
     browser.get(f"https://thesportsdb.com/edit_team_add.php?l={league[0]}")
     browser.find_element_by_xpath(
-        "//*[@id='header']/nav/div/div[2]/ul/li[5]/a[1]"
+        "//*[@id='header']/nav/div/div[2]/ul/li[6]/a[1]"
     ).click()
     browser.find_element_by_xpath(
         "//*[@id='feature']/div/div[3]/div/form/div[1]/input"
@@ -522,7 +522,7 @@ def list_teams(api_key, league_id):
         f"https://www.thesportsdb.com/api/v1/json/{api_key}/lookup_all_teams.php?id={league_id}"
     ).json()
     lookup_all_teams_df = pd.DataFrame(lookup_all_teams["teams"])
-    lookup_all_teams_df = lookup_all_teams_df[["strTeam", "strCountry", "strSport"]]
+    lookup_all_teams_df = lookup_all_teams_df[["strTeam", "idTeam", "strCountry", "strSport", "idAPIfootball"]]
     
     return lookup_all_teams_df
 
