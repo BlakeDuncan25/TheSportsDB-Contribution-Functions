@@ -512,7 +512,7 @@ def delete_all_events(api_key, league_id, season):
     league_events = requests.get(url)
     parse_league_events = league_events.json()
     df_league_events = pd.DataFrame(parse_league_events['events'])
-    df_league_events = df_league_events[(df_league_events["strCountry"]=="") | (df_league_events["strCountry"].isnull())]
+    df_league_events = df_league_events[(df_league_events["strCountry"]=="") | (df_league_events["strCountry"].isnull()) | (df_league_events["strVenue"].notnull())]
     idEvent = df_league_events.idEvent.tolist()
     for i in range(len(idEvent)):
         browser.get(f"https://www.thesportsdb.com/event.php?e={idEvent[i]}&d=9")
