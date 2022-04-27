@@ -9,6 +9,7 @@ from IPython.display import display, HTML
 import requests
 import json
 from ast import literal_eval
+from datetime import datetime, timedelta
 
 chrome_options = webdriver.ChromeOptions()
 prefs = {"profile.managed_default_content_settings.images": 2}
@@ -492,9 +493,11 @@ def move_team(tsdb_id, league_name, cup=False):
 
 def add_channel_bulk(api_key, league_id, season, channel):
     url = f"https://www.thesportsdb.com/api/v1/json/{api_key}/eventsseason.php?id={league_id}&s={season}"
+    yesterday = datetime.strftime(datetime.now() - timedelta(1), "%Y-%m-%d")
     league_events = requests.get(url)
     parse_league_events = league_events.json()
     df_league_events = pd.DataFrame(parse_league_events['events'])
+    df_league_events = df_league_events[df_league_events["strTimestamp"] >= f"{yesterday} 05:00:00"]
     idEvent = df_league_events.idEvent.tolist()
     for i in range(len(idEvent)):
         browser.get(f"https://www.thesportsdb.com/edit_event_tv.php?e={idEvent[i]}")
